@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -10,10 +12,21 @@ import { LinearGradient } from "expo-linear-gradient";
 import TopMenu from "./components/TopMenu";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { getGlobalStyles } from "../globalStyles";
+import { Ionicons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 
 export default function PaginaInicial() {
   const { width, height } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
+  const contactIconSize = 90;
+
+  const handleContact = (url: string) => {
+    if (Platform.OS === "web") {
+      window.open(url, "_blank"); // abre nova aba no navegador
+    } else {
+      Linking.openURL(url); // abre navegador externo ou app de e-mail no celular
+    }
+  };
 
   return (
     <>
@@ -21,7 +34,7 @@ export default function PaginaInicial() {
       <ScrollView>
         <View
           style={[
-            styles.container,
+            globalStyles.container,
             {
               backgroundColor: "#eee",
             },
@@ -56,25 +69,7 @@ export default function PaginaInicial() {
             >
               Mapeie seus estudos e registre sua evolução!
             </Text>
-
-            <View style={globalStyles.divider} />
-
-            <LinearGradient
-              colors={["#254cfcff", "#5811cbff"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={globalStyles.card}
-            >
-              <Text style={globalStyles.title}>Sobre nós</Text>
-            </LinearGradient>
-            <Text
-              style={{
-                color: "black",
-                fontSize: 14,
-                paddingHorizontal: 20,
-                textAlign: "justify",
-              }}
-            >
+            <Text style={styles.defaultText}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
               interdum lorem fringilla, iaculis dolor sed, porttitor mauris.
               Aliquam erat volutpat. Curabitur non turpis non velit commodo
@@ -86,7 +81,73 @@ export default function PaginaInicial() {
               tortor. Integer ac justo ac elit viverra semper. In fringilla arcu
               erat, at semper nunc vestibulum eget.
             </Text>
+
             <View style={globalStyles.divider} />
+
+            <LinearGradient
+              colors={["#254cfcff", "#5811cbff"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={globalStyles.card}
+            >
+              <Text style={globalStyles.title}>Sobre nós</Text>
+            </LinearGradient>
+
+            <Text style={styles.defaultText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+              interdum lorem fringilla, iaculis dolor sed, porttitor mauris.
+              Aliquam erat volutpat. Curabitur non turpis non velit commodo
+              porttitor non sed ex. Maecenas ex magna, convallis vitae diam
+              rhoncus, molestie placerat lacus. Nulla ultrices interdum lacus,
+              sed mattis augue rutrum id. Proin metus leo, fringilla elementum
+              magna in, lobortis posuere ante. Mauris semper, neque id varius
+              interdum, mauris mi tempor purus, ac maximus risus lectus vel
+              tortor. Integer ac justo ac elit viverra semper. In fringilla arcu
+              erat, at semper nunc vestibulum eget.
+            </Text>
+
+            <View style={globalStyles.divider} />
+
+            <LinearGradient
+              colors={["#254cfcff", "#5811cbff"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={globalStyles.card}
+            >
+              <Text style={globalStyles.title}>Contate-nos!</Text>
+            </LinearGradient>
+
+            <View style={styles.contactSection}>
+              <View style={styles.contactRow}>
+                <TouchableOpacity
+                  onPress={() =>
+                    handleContact(
+                      "mailto:thiagoraia2004@gmail.com?subject=Contato&body=Olá"
+                    )
+                  }
+                >
+                  <Ionicons name="mail-outline" size={120} color="red" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    handleContact(
+                      "https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
+                    )
+                  }
+                >
+                  <Ionicons name="logo-linkedin" size={93} color="blue" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() =>
+                    handleContact("https://github.com/ThiagoRaia1")
+                  }
+                >
+                  <Ionicons name="logo-github" size={100} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
 
@@ -107,23 +168,6 @@ export default function PaginaInicial() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  topMenuContent: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20,
-  },
-  topMenuItem: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-  },
   button: {
     backgroundColor: "#fff",
     padding: 14,
@@ -136,9 +180,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  registerText: {
-    marginTop: 16,
-    textAlign: "center",
-    color: "#fff",
+  defaultText: {
+    color: "black",
+    fontSize: 14,
+    paddingHorizontal: 20,
+    textAlign: "justify",
+  },
+  contactSection: {
+    gap: 10,
+  },
+  contactRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+  },
+  contactText: {
+    color: "black",
+    fontSize: 20,
+    textAlign: "justify",
   },
 });
