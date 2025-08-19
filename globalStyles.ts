@@ -15,7 +15,8 @@ export const getGlobalStyles = (theme: "light" | "dark") =>
       marginVertical: 20,
     },
     card: {
-      width: "85%",
+      width: "100%",
+      maxWidth: 1000,
       padding: 20,
       borderRadius: 20,
       boxShadow: "0px 10px 10px rgba(48, 72, 206, 1)",

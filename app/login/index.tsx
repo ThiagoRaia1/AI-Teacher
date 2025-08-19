@@ -72,19 +72,18 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "100%",
     maxWidth: 1000,
+    justifyContent: "center",
     backgroundColor: "rgba(255,255,255,0.1)",
-    padding: 24,
+    padding: 20,
     borderRadius: 20,
     boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.8)",
-    justifyContent: "center",
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#fff",
-    marginBottom: 4,
     textAlign: "center",
   },
   subtitle: {

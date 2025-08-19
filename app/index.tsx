@@ -51,12 +51,14 @@ export default function PaginaInicial() {
               </View>
             </LinearGradient>
 
-            <Text style={{ fontSize: 25, fontWeight: 500 }}>
+            <Text
+              style={{ fontSize: 25, fontWeight: 500, textAlign: "center" }}
+            >
               Mapeie seus estudos e registre sua evolução!
             </Text>
 
             <View style={globalStyles.divider} />
-            
+
             <LinearGradient
               colors={["#254cfcff", "#5811cbff"]}
               start={{ x: 0, y: 0 }}
@@ -68,8 +70,9 @@ export default function PaginaInicial() {
             <Text
               style={{
                 color: "black",
-                fontSize: 20,
-                padding: 20,
+                fontSize: 14,
+                paddingHorizontal: 20,
+                textAlign: "justify",
               }}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
