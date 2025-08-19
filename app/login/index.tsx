@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { getGlobalStyles } from "../../globalStyles";
+import TopMenu from "../components/TopMenu";
 
 export default function Login() {
   const globalStyles = getGlobalStyles("light");
@@ -21,64 +22,83 @@ export default function Login() {
   };
 
   return (
-    <LinearGradient
-      colors={["#6a11cb", "#2575fc"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={globalStyles.container}
-    >
-      <View style={styles.card}>
-        <Text style={styles.title}>Bem-vindo</Text>
-        <Text style={styles.subtitle}>Faça login para continuar</Text>
-
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#aaa"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
-
-        <Text style={styles.label}>Senha</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={senha}
-          onChangeText={setSenha}
-        />
-
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.registerText} selectable={false}>
-          Não tem conta?{" "}
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/register");
+    <>
+      <TopMenu />
+      <LinearGradient
+        colors={["#6a11cb", "#2575fc"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={globalStyles.container}
+      >
+        <View style={styles.card}>
+          <View
+            style={{
+              width: "100%",
+              maxWidth: 1000,
+              alignSelf: "center",
+              justifyContent: "center",
             }}
           >
-            <Text style={styles.registerLink}>Cadastre-se</Text>
-          </TouchableOpacity>
-        </Text>
-      </View>
-    </LinearGradient>
+            <Text style={styles.title}>Bem-vindo</Text>
+            <Text style={styles.subtitle}>Faça login para continuar</Text>
+
+            <View
+              style={{
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#aaa"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+
+            <Text style={styles.label}>Senha</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Senha"
+              placeholderTextColor="#aaa"
+              secureTextEntry
+              value={senha}
+              onChangeText={setSenha}
+            />
+
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+              <Text style={styles.buttonText}>Entrar</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.registerText} selectable={false}>
+              {"Não tem um conta? "}
+              <TouchableOpacity
+                onPress={() => {
+                  router.push("/register");
+                }}
+              >
+                <Text style={styles.registerLink}>Cadastre-se</Text>
+              </TouchableOpacity>
+            </Text>
+          </View>
+        </View>
+      </LinearGradient>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
     width: "100%",
-    maxWidth: 1000,
+    height: "100%",
     justifyContent: "center",
     backgroundColor: "rgba(255,255,255,0.1)",
     padding: 20,
     borderRadius: 20,
-    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.8)",
+    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.8)",
   },
   title: {
     fontSize: 28,
@@ -93,12 +113,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   label: {
+    alignSelf: "flex-start",
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
     marginBottom: 5,
   },
   input: {
+    width: "100%",
     backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: 12,
     padding: 14,

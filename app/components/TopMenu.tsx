@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import {
   View,
   TouchableOpacity,
@@ -10,16 +10,18 @@ import {
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { getGlobalStyles } from "../../globalStyles";
 import { breakpoints } from "../../utils/breakpoints";
+import { pageNames } from "../../utils/pageNames";
 
 export default function TopMenu() {
   const { width, height } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
   const isMobile = width < breakpoints.mobile;
+  const pathname = usePathname();
 
   return (
     <>
       {!isMobile && (
-        <View style={[styles.topBar, { height: !isMobile ? 90 : 50 }]}>
+        <View style={styles.topBar}>
           {/* Lado esquerdo */}
           <View
             style={[
@@ -29,20 +31,17 @@ export default function TopMenu() {
               },
             ]}
           >
-            <TouchableOpacity onPress={() => router.push("/")}>
+            <TouchableOpacity
+              onPress={() => router.push("/")}
+              style={styles.topMenuItem}
+            >
               <LinearGradient
                 colors={["#254cfcff", "#5811cbff"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={[
-                  {
-                    flexDirection: "row",
-                    gap: 10,
-                    padding: 15,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 20,
-                  },
+                  styles.topMenuItem,
+                  { flexDirection: "row", gap: 10, padding: 15 },
                 ]}
               >
                 <FontAwesome5 name="brain" size={30} color="white" />
@@ -54,48 +53,52 @@ export default function TopMenu() {
             </TouchableOpacity>
           </View>
 
-          {/* Lado direito */}
-          <View
-            style={[
-              styles.topMenuContent,
-              {
-                justifyContent: "flex-end",
-              },
-            ]}
-          >
-            <TouchableOpacity style={styles.topMenuItem}>
-              <Text style={styles.topMenuItemText}>Item 1</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.topMenuItem}>
-              <Text style={styles.topMenuItemText}>Item 2</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.topMenuItem}>
-              <Text style={styles.topMenuItemText}>Sobre nós</Text>
-            </TouchableOpacity>
-            <LinearGradient
-              colors={["#254cfcff", "#5811cbff"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+          <>
+            {/* Lado direito */}
+            <View
               style={[
-                styles.topMenuItem,
+                styles.topMenuContent,
                 {
-                  borderRadius: 10,
+                  justifyContent: "flex-end",
                 },
               ]}
             >
+              {pathname !== pageNames.login && (
+                <>
+                  <TouchableOpacity style={styles.topMenuItem}>
+                    <Text style={styles.topMenuItemText}>Item 1</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.topMenuItem}>
+                    <Text style={styles.topMenuItemText}>Item 2</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.topMenuItem}>
+                    <Text style={styles.topMenuItemText}>Sobre nós</Text>
+                  </TouchableOpacity>
+                </>
+              )}
               <TouchableOpacity
                 onPress={() => {
-                  router.push("/login");
+                  if (pathname === pageNames.main) router.push(pageNames.login);
+                  if (pathname === pageNames.login) router.push(pageNames.main);
                 }}
+                style={styles.topMenuItem}
               >
-                <Text style={[styles.topMenuItemText, { color: "white" }]}>
-                  Login
-                </Text>
+                <LinearGradient
+                  colors={["#254cfcff", "#5811cbff"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.topMenuItem}
+                >
+                  <Text style={[styles.topMenuItemText, { color: "white" }]}>
+                    {pathname === pageNames.main && "Login"}
+                    {pathname === pageNames.login && "Voltar"}
+                  </Text>
+                </LinearGradient>
               </TouchableOpacity>
-            </LinearGradient>
-          </View>
+            </View>
+          </>
         </View>
       )}
     </>
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     top: 0,
     width: "100%",
+    height: 70,
     padding: 20,
   },
   title: {
@@ -128,10 +132,13 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   topMenuItem: {
-    alignItems: "center",
     justifyContent: "center",
-    height: "100%",
-    paddingHorizontal: 20, // dá espaço lateral
+    alignItems: "center",
+    minWidth: 120,
+    height: 50,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
   topMenuItemText: {
     fontSize: 18,
