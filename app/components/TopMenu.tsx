@@ -1,86 +1,118 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { getGlobalStyles } from "../../globalStyles";
 
 export default function TopMenu() {
+  const { width, height } = useWindowDimensions();
+  const globalStyles = getGlobalStyles("light");
+
   return (
-    <View
-      style={{
-        position: "absolute",
-        top: 0,
-        backgroundColor: "#6A2CCB",
-        width: "100%",
-        height: 50,
-        flexDirection: "row",
-      }}
-    >
+    <View style={styles.topBar}>
+      {/* Lado esquerdo */}
       <View
         style={[
           styles.topMenuContent,
           {
             justifyContent: "flex-start",
-            paddingLeft: 20,
           },
         ]}
       >
-        <TouchableOpacity style={styles.topMenuItem}>
-          <Text>Esquerda</Text>
+        <TouchableOpacity onPress={() => router.push("/")}>
+          <LinearGradient
+            colors={["#254cfcff", "#5811cbff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[
+              {
+                flexDirection: "row",
+                gap: 10,
+                padding: 15,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+              },
+            ]}
+          >
+            <FontAwesome5 name="brain" size={30} color="white" />
+            <View style={{}}>
+              <Text style={styles.title}>AI TEACHER</Text>
+              <Text style={styles.subtitle}>Seu auxílio aos estudos!</Text>
+            </View>
+          </LinearGradient>
         </TouchableOpacity>
       </View>
+
+      {/* Lado direito */}
       <View
         style={[
           styles.topMenuContent,
           {
             justifyContent: "flex-end",
-            paddingRight: 20,
           },
         ]}
       >
         <TouchableOpacity style={styles.topMenuItem}>
-          <Text>Direita</Text>
+          <Text style={styles.topMenuItemText}>Item 1</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.topMenuItem}
-          onPress={() => {
-            router.push("/login");
-          }}
-        >
-          <Text>Login</Text>
+        <TouchableOpacity style={styles.topMenuItem}>
+          <Text style={styles.topMenuItemText}>Item 2</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.topMenuItem}>
+          <Text style={styles.topMenuItemText}>Sobre nós</Text>
+        </TouchableOpacity>
+        <LinearGradient
+          colors={["#254cfcff", "#5811cbff"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[
+            styles.topMenuItem,
+            {
+              borderRadius: 10,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/login");
+            }}
+          >
+            <Text style={[styles.topMenuItemText, { color: "white" }]}>
+              Login
+            </Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  card: {
-    width: "85%",
-    maxWidth: 1000,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    padding: 24,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 10,
+  topBar: {
+    flexDirection: "row",
+    top: 0,
+    width: "100%",
+    height: 90,
+    padding: 20,
   },
   title: {
-    fontSize: 28,
+    fontSize: 14,
     fontWeight: "bold",
     color: "#fff",
-    marginBottom: 4,
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
-    color: "#ddd",
-    marginBottom: 20,
+    fontSize: 8,
+    color: "#ccc",
     textAlign: "center",
   },
   topMenuContent: {
@@ -88,28 +120,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    gap: 40,
   },
   topMenuItem: {
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+    paddingHorizontal: 20, // dá espaço lateral
   },
-  button: {
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#2575fc",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  registerText: {
-    marginTop: 16,
-    textAlign: "center",
-    color: "#fff",
+  topMenuItemText: {
+    fontSize: 18,
+    fontWeight: 500,
+    color: "#6B6B6B",
   },
 });

@@ -7,8 +7,12 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
+import { getGlobalStyles } from "../../globalStyles";
 
-export default function LoginScreen() {
+export default function Login() {
+  const globalStyles = getGlobalStyles("light");
+
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -21,7 +25,7 @@ export default function LoginScreen() {
       colors={["#6a11cb", "#2575fc"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={styles.container}
+      style={globalStyles.container}
     >
       <View style={styles.card}>
         <Text style={styles.title}>Bem-vindo</Text>
@@ -53,7 +57,11 @@ export default function LoginScreen() {
 
         <Text style={styles.registerText} selectable={false}>
           Não tem conta?{" "}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/register");
+            }}
+          >
             <Text style={styles.registerLink}>Cadastre-se</Text>
           </TouchableOpacity>
         </Text>
@@ -63,22 +71,14 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   card: {
-    width: "85%",
+    width: "90%",
     maxWidth: 1000,
     backgroundColor: "rgba(255,255,255,0.1)",
     padding: 24,
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 10,
+    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.8)",
+    justifyContent: "center",
   },
   title: {
     fontSize: 28,
