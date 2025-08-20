@@ -12,7 +12,11 @@ import { getGlobalStyles } from "../../globalStyles";
 import { breakpoints } from "../../utils/breakpoints";
 import { pageNames } from "../../utils/pageNames";
 
-export default function TopMenu() {
+export default function TopMenu({
+  onPressSobreNos,
+}: {
+  onPressSobreNos?: () => void;
+}) {
   const { width } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
   const isMobile = width < breakpoints.mobile;
@@ -66,10 +70,13 @@ export default function TopMenu() {
               {pathname !== pageNames.login && (
                 <>
                   <TouchableOpacity style={styles.topMenuItem}>
-                    <Text style={styles.topMenuItemText}>Item 1</Text>
+                    <Text style={styles.topMenuItemText}>Equipe</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.topMenuItem}>
+                  <TouchableOpacity
+                    style={styles.topMenuItem}
+                    onPress={onPressSobreNos}
+                  >
                     <Text style={styles.topMenuItemText}>Sobre nós</Text>
                   </TouchableOpacity>
 
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
   },
   topMenuItemText: {
     fontSize: 18,
-    fontWeight: 500,
+    fontWeight: "500",
     color: "#6B6B6B",
   },
 });

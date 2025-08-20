@@ -29,17 +29,13 @@ export default function Layout() {
       pathname: "register/index",
       drawerLabelAndTitle: "Cadastrar-se",
     },
-
-    components: {
-      TopMenu: "components/TopMenu",
-    },
   };
 
-  const showDrawer =
-    width < breakpoints.mobile &&
-    pathname !== pageNames.login &&
-    pathname !== pageNames.register;
+  // Array para não exibir os itens definidos no drawer. Componentes devem ser adicionados aqui.
+  const ignorableComponents = ["ContactCard", "components/TopMenu"];
 
+  // Se a largura for maior que 768px, o drawer não é renderizado
+  // e exibe o menu em components/TopMenu no lugar
   if (width < breakpoints.mobile) {
     switch (pathname) {
       case pageNames.main:
@@ -84,14 +80,18 @@ export default function Layout() {
               />
 
               {/* Nao aparecem no drawer */}
-              <Drawer.Screen
-                name={pathnames.components.TopMenu}
-                options={{
-                  drawerItemStyle: {
-                    display: "none",
-                  },
-                }}
-              />
+
+              {/* Percorre o array ignorableComponents, todo pathname que for 
+              adicionado nesse array não aparecerá em nenhum drawer */}
+              {ignorableComponents.map((componentName) => (
+                <Drawer.Screen
+                  key={componentName}
+                  name={componentName}
+                  options={{
+                    drawerItemStyle: { display: "none" },
+                  }}
+                />
+              ))}
 
               <Drawer.Screen
                 name={pathnames.pages.mainMenu.pathname}
@@ -135,15 +135,17 @@ export default function Layout() {
                 }}
               />
 
-              {/* Nao aparecem no drawer */}
-              <Drawer.Screen
-                name={pathnames.components.TopMenu}
-                options={{
-                  drawerItemStyle: {
-                    display: "none",
-                  },
-                }}
-              />
+              {/* Percorre o array ignorableComponents, todo pathname que for 
+              adicionado nesse array não aparecerá em nenhum drawer */}
+              {ignorableComponents.map((componentName) => (
+                <Drawer.Screen
+                  key={componentName}
+                  name={componentName}
+                  options={{
+                    drawerItemStyle: { display: "none" },
+                  }}
+                />
+              ))}
 
               <Drawer.Screen
                 name={pathnames.login.pathname}

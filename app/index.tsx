@@ -1,38 +1,86 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
-  Image,
+  findNodeHandle,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import TopMenu from "./components/TopMenu";
 import { getGlobalStyles } from "../globalStyles";
 import { FontAwesome5 } from "@expo/vector-icons";
-import * as Linking from "expo-linking";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import ContactCard from "./ContactCard";
 
 export default function PaginaInicial() {
   const { width, height } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
-  const contactBaseIconSize = 150;
 
-  const handleContact = (url: string) => {
+  // Altura do TopMenu
+  const TOP_MENU_HEIGHT = 70;
+
+  // Entender melhor o funcionamento para scrollar até a seção que desejo
+
+  // Refs
+  const scrollRef = useRef<ScrollView>(null);
+  const sobreNosRef = useRef<View>(null);
+
+  // Guarda o Y relativo ao conteúdo do ScrollView
+  const [sobreNosY, setSobreNosY] = useState(0);
+  const scrollToSobreNos = () => {
+    // WEB: use o DOM diretamente (nativeID -> id)
     if (Platform.OS === "web") {
-      window.open(url, "_blank"); // abre nova aba no navegador
-    } else {
-      Linking.openURL(url); // abre navegador externo ou app de e-mail no celular
+      const el = document.getElementById("sobre-nos");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Se o TopMenu for “fixo” e cobrir o topo, compense
+        window.scrollBy({
+          top: -TOP_MENU_HEIGHT,
+          left: 0,
+          behavior: "instant" as ScrollBehavior,
+        });
+      }
+      return;
+    }
+
+    // MOBILE/NATIVE: se já temos o Y salvo, usa direto (+ compensação do header)
+    if (scrollRef.current && sobreNosY > 0) {
+      scrollRef.current.scrollTo({
+        y: Math.max(0, sobreNosY - TOP_MENU_HEIGHT),
+        animated: true,
+      });
+      return;
+    }
+
+    // Fallback: mede agora relativo ao ScrollView
+    const scrollNode = findNodeHandle(scrollRef.current);
+    if (sobreNosRef.current && scrollNode && scrollRef.current) {
+      // @ts-ignore - RN expõe measureLayout no host component
+      sobreNosRef.current.measureLayout(
+        scrollNode,
+        (x: number, y: number) => {
+          scrollRef.current?.scrollTo({
+            y: Math.max(0, y - TOP_MENU_HEIGHT),
+            animated: true,
+          });
+        },
+        () => {
+          // se der erro de medida, tenta o que temos
+          scrollRef.current?.scrollTo({
+            y: Math.max(0, sobreNosY - TOP_MENU_HEIGHT),
+            animated: true,
+          });
+        }
+      );
     }
   };
 
   return (
     <>
-      <TopMenu />
-      <ScrollView>
+      <TopMenu onPressSobreNos={scrollToSobreNos} />
+      <ScrollView ref={scrollRef}>
         <View
           style={[
             globalStyles.container,
@@ -66,7 +114,7 @@ export default function PaginaInicial() {
             </LinearGradient>
 
             <Text
-              style={{ fontSize: 25, fontWeight: 500, textAlign: "center" }}
+              style={{ fontSize: 25, fontWeight: "500", textAlign: "center" }}
             >
               Mapeie seus estudos e registre sua evolução!
             </Text>
@@ -85,14 +133,21 @@ export default function PaginaInicial() {
 
             <View style={globalStyles.divider} />
 
-            <LinearGradient
-              colors={["#254cfcff", "#5811cbff"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={globalStyles.card}
+            <View
+              ref={sobreNosRef}
+              nativeID="sobre-nos" // vira id no DOM (web)
+              onLayout={(e) => setSobreNosY(e.nativeEvent.layout.y)}
+              style={{ width: "100%", alignItems: "center" }}
             >
-              <Text style={globalStyles.title}>Sobre nós</Text>
-            </LinearGradient>
+              <LinearGradient
+                colors={["#254cfcff", "#5811cbff"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={globalStyles.card}
+              >
+                <Text style={globalStyles.title}>Sobre nós</Text>
+              </LinearGradient>
+            </View>
 
             <Text style={styles.defaultText}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
@@ -119,51 +174,14 @@ export default function PaginaInicial() {
             </LinearGradient>
 
             <View style={styles.contactSection}>
-              <View style={styles.contactRow}>
-                <Image
-                  source={{
-                    uri: "https://avatars.githubusercontent.com/u/143272411?v=4",
-                  }}
-                  style={styles.ourTeamImage}
-                />
-                <View style={{ alignItems: "center", gap: 10 }}>
-                  <Text style={{ fontSize: 60, fontWeight: 600 }}>
-                    Thiago Raia
-                  </Text>
-                  <Text style={{ fontSize: 20, textAlign: "center" }}>
-                    {"Desenvolvedor Fullstack,\ncriador do AI Teacher."}
-                  </Text>
-                  <View style={styles.contactRow}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleContact(
-                          "https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
-                        )
-                      }
-                    >
-                      <FontAwesome
-                        name="linkedin-square"
-                        size={contactBaseIconSize}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleContact("https://github.com/ThiagoRaia1")
-                      }
-                    >
-                      <FontAwesome
-                        name="github-square"
-                        size={contactBaseIconSize}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
+              <ContactCard
+                iconPerfilUri="https://avatars.githubusercontent.com/u/143272411?v=4"
+                name="Thiago Raia"
+                description={"Desenvolvedor Full Stack.\nCriador do AI Teacher"}
+                linkedinUrl="https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
+                githubUrl="https://github.com/ThiagoRaia1"
+              />
             </View>
-
             <View style={globalStyles.divider} />
           </View>
         </View>
@@ -196,25 +214,10 @@ const styles = StyleSheet.create({
     textAlign: "justify",
   },
   contactSection: {
-    flex: 1,
-    width: 500,
-    padding: 20,
-    gap: 40,
-    borderRadius: 20,
-    borderColor: "#aaa",
-    boxShadow: "0px 10px 20px rgba(48, 72, 206, 0.3)",
-  },
-  contactRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "center",
-    gap: 10,
-    justifyContent: "space-evenly",
-  },
-  ourTeamImage: {
-    width: 300,
-    height: 300,
-    borderRadius: 300,
+    justifyContent: "center",
+    gap: 20,
   },
   bottomContent: {
     height: 50,
