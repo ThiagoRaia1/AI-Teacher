@@ -7,18 +7,19 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import TopMenu from "./components/TopMenu";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { getGlobalStyles } from "../globalStyles";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function PaginaInicial() {
   const { width, height } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
-  const contactIconSize = 90;
+  const contactBaseIconSize = 150;
 
   const handleContact = (url: string) => {
     if (Platform.OS === "web") {
@@ -114,52 +115,60 @@ export default function PaginaInicial() {
               end={{ x: 1, y: 1 }}
               style={globalStyles.card}
             >
-              <Text style={globalStyles.title}>Contate-nos!</Text>
+              <Text style={globalStyles.title}>Equipe</Text>
             </LinearGradient>
 
             <View style={styles.contactSection}>
               <View style={styles.contactRow}>
-                <TouchableOpacity
-                  onPress={() =>
-                    handleContact(
-                      "mailto:thiagoraia2004@gmail.com?subject=Contato&body=Olá"
-                    )
-                  }
-                >
-                  <Ionicons name="mail-outline" size={120} color="red" />
-                </TouchableOpacity>
+                <Image
+                  source={{
+                    uri: "https://avatars.githubusercontent.com/u/143272411?v=4",
+                  }}
+                  style={styles.ourTeamImage}
+                />
+                <View style={{ alignItems: "center", gap: 10 }}>
+                  <Text style={{ fontSize: 60, fontWeight: 600 }}>
+                    Thiago Raia
+                  </Text>
+                  <Text style={{ fontSize: 20, textAlign: "center" }}>
+                    {"Desenvolvedor Fullstack,\ncriador do AI Teacher."}
+                  </Text>
+                  <View style={styles.contactRow}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleContact(
+                          "https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
+                        )
+                      }
+                    >
+                      <FontAwesome
+                        name="linkedin-square"
+                        size={contactBaseIconSize}
+                        color="black"
+                      />
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    handleContact(
-                      "https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
-                    )
-                  }
-                >
-                  <Ionicons name="logo-linkedin" size={93} color="blue" />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() =>
-                    handleContact("https://github.com/ThiagoRaia1")
-                  }
-                >
-                  <Ionicons name="logo-github" size={100} color="black" />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        handleContact("https://github.com/ThiagoRaia1")
+                      }
+                    >
+                      <FontAwesome
+                        name="github-square"
+                        size={contactBaseIconSize}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </View>
+
+            <View style={globalStyles.divider} />
           </View>
         </View>
 
-        <View
-          style={{
-            height: 100,
-            width: "100%",
-            backgroundColor: "#fff",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <View style={styles.bottomContent}>
           <Text style={globalStyles.subtitle}>Thiago Raia</Text>
         </View>
       </ScrollView>
@@ -182,22 +191,36 @@ const styles = StyleSheet.create({
   },
   defaultText: {
     color: "black",
-    fontSize: 14,
+    fontSize: 26,
     paddingHorizontal: 20,
     textAlign: "justify",
   },
   contactSection: {
-    gap: 10,
+    flex: 1,
+    width: 500,
+    padding: 20,
+    gap: 40,
+    borderRadius: 20,
+    borderColor: "#aaa",
+    boxShadow: "0px 10px 20px rgba(48, 72, 206, 0.3)",
   },
   contactRow: {
     flexDirection: "row",
-    justifyContent: "center",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: 10,
+    justifyContent: "space-evenly",
   },
-  contactText: {
-    color: "black",
-    fontSize: 20,
-    textAlign: "justify",
+  ourTeamImage: {
+    width: 300,
+    height: 300,
+    borderRadius: 300,
+  },
+  bottomContent: {
+    height: 50,
+    width: "100%",
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

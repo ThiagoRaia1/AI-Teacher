@@ -13,7 +13,7 @@ import { breakpoints } from "../../utils/breakpoints";
 import { pageNames } from "../../utils/pageNames";
 
 export default function TopMenu() {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
   const isMobile = width < breakpoints.mobile;
   const pathname = usePathname();
@@ -70,11 +70,14 @@ export default function TopMenu() {
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.topMenuItem}>
-                    <Text style={styles.topMenuItemText}>Item 2</Text>
+                    <Text style={styles.topMenuItemText}>Sobre nós</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.topMenuItem}>
-                    <Text style={styles.topMenuItemText}>Sobre nós</Text>
+                  <TouchableOpacity
+                    style={styles.topMenuItem}
+                    onPress={() => router.push(pageNames.register)}
+                  >
+                    <Text style={styles.topMenuItemText}>Registrar</Text>
                   </TouchableOpacity>
                 </>
               )}
