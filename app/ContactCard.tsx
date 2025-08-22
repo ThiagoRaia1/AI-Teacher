@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Linking,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 
 const handleContact = (url: string) => {
@@ -32,79 +33,85 @@ export default function ContactCard({
   linkedinUrl,
   githubUrl,
 }: ContactCardProps) {
-  const contactBaseIconSize = 150;
+  const { width } = useWindowDimensions();
+  const contactBaseIconSize = 40;
+
+  const styles = StyleSheet.create({
+    contactCard: {
+      flexDirection: "row",
+      flex: 1,
+      minWidth: 490,
+      borderRadius: 20,
+      borderColor: "#aaa",
+      boxShadow: "0px 10px 20px rgba(48, 72, 206, 0.3)",
+    },
+    contactCardInnerContent: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+    contactRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+      gap: 10,
+      justifyContent: "space-evenly",
+    },
+    ourTeamImage: {
+      width: "40%",
+      height: 300,
+      borderRadius: 20,
+      borderBottomRightRadius: 0,
+      borderTopRightRadius: 0,
+    },
+    dataContainer: {
+      flex: 1,
+      height: "100%",
+      alignSelf: "center",
+      justifyContent: "space-evenly",
+      alignItems: "center",
+    },
+    name: {
+      textAlign: "center",
+      fontSize: 40,
+      fontWeight: 600,
+    },
+    description: {
+      fontSize: 16,
+      textAlign: "center",
+    },
+  });
 
   return (
     <View style={styles.contactCard}>
-      <View style={styles.contactCardInnerContent}>
-        <Image
-          source={{
-            uri: iconPerfilUri,
-          }}
-          style={styles.ourTeamImage}
-        />
-        <View style={styles.dataContainer}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.description}>{description}</Text>
+      <Image
+        source={{
+          uri: iconPerfilUri,
+        }}
+        style={styles.ourTeamImage}
+      />
+      <View style={styles.dataContainer}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.description}>{description}</Text>
 
-          <View style={styles.contactRow}>
-            <TouchableOpacity onPress={() => handleContact(linkedinUrl)}>
-              <FontAwesome
-                name="linkedin-square"
-                size={contactBaseIconSize}
-                color="black"
-              />
-            </TouchableOpacity>
+        <View style={styles.contactRow}>
+          <TouchableOpacity onPress={() => handleContact(linkedinUrl)}>
+            <FontAwesome
+              name="linkedin-square"
+              size={contactBaseIconSize}
+              color="black"
+            />
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => handleContact(githubUrl)}>
-              <FontAwesome
-                name="github-square"
-                size={contactBaseIconSize}
-                color="black"
-              />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={() => handleContact(githubUrl)}>
+            <FontAwesome
+              name="github-square"
+              size={contactBaseIconSize}
+              color="black"
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  contactCard: {
-    width: 500,
-    padding: 20,
-    borderRadius: 20,
-    borderColor: "#aaa",
-    boxShadow: "0px 10px 20px rgba(48, 72, 206, 0.3)",
-  },
-  contactCardInnerContent: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  contactRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: 10,
-    justifyContent: "space-evenly",
-  },
-  ourTeamImage: {
-    width: 300,
-    height: 300,
-    borderRadius: 300,
-  },
-  dataContainer: {
-    alignItems: "center",
-    gap: 10,
-  },
-  name: {
-    fontSize: 60,
-    fontWeight: 600,
-  },
-  description: {
-    fontSize: 20,
-    textAlign: "center",
-  },
-});

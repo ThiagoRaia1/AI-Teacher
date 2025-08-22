@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Platform,
   ScrollView,
@@ -9,13 +9,50 @@ import {
   findNodeHandle,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import TopMenu from "./components/TopMenu";
-import { getGlobalStyles } from "../globalStyles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import ContactCard from "./ContactCard";
+import TopMenu from "./components/TopMenu";
+import { getGlobalStyles } from "../globalStyles";
 
 export default function PaginaInicial() {
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
+
+  const styles = StyleSheet.create({
+    button: {
+      backgroundColor: "#fff",
+      padding: 14,
+      borderRadius: 12,
+      alignItems: "center",
+      marginTop: 10,
+    },
+    buttonText: {
+      color: "#2575fc",
+      fontWeight: "bold",
+      fontSize: 16,
+    },
+    defaultText: {
+      color: "black",
+      fontSize: width < 768 ? 16 : 26,
+      paddingHorizontal: 20,
+      textAlign: "justify",
+    },
+    contactSection: {
+      width: "100%",
+      maxWidth: 1000,
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      gap: 20,
+    },
+    bottomContent: {
+      height: 50,
+      width: "100%",
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
   const globalStyles = getGlobalStyles("light");
 
   // Altura do TopMenu
@@ -79,7 +116,7 @@ export default function PaginaInicial() {
 
   return (
     <>
-      <TopMenu onPressSobreNos={scrollToSobreNos} />
+      {/* <TopMenu onPressSobreNos={scrollToSobreNos} /> */}
       <ScrollView ref={scrollRef}>
         <View
           style={[
@@ -181,6 +218,20 @@ export default function PaginaInicial() {
                 linkedinUrl="https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
                 githubUrl="https://github.com/ThiagoRaia1"
               />
+              <ContactCard
+                iconPerfilUri="https://avatars.githubusercontent.com/u/143272411?v=4"
+                name="Thiago Raia"
+                description={"Desenvolvedor Full Stack.\nCriador do AI Teacher"}
+                linkedinUrl="https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
+                githubUrl="https://github.com/ThiagoRaia1"
+              />
+              <ContactCard
+                iconPerfilUri="https://avatars.githubusercontent.com/u/143272411?v=4"
+                name="Thiago Raia"
+                description={"Desenvolvedor Full Stack.\nCriador do AI Teacher"}
+                linkedinUrl="https://br.linkedin.com/in/thiago-raia-de-moura-014058362"
+                githubUrl="https://github.com/ThiagoRaia1"
+              />
             </View>
             <View style={globalStyles.divider} />
           </View>
@@ -193,37 +244,3 @@ export default function PaginaInicial() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#2575fc",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  defaultText: {
-    color: "black",
-    fontSize: 26,
-    paddingHorizontal: 20,
-    textAlign: "justify",
-  },
-  contactSection: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: 20,
-  },
-  bottomContent: {
-    height: 50,
-    width: "100%",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

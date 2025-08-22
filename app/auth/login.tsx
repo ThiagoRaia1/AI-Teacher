@@ -1,25 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
+  Text,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 import { getGlobalStyles } from "../../globalStyles";
+import { supabase } from "../../lib/supabase";
+import { pageNames } from "../../utils/pageNames";
+import Carregando from "../components/Carregando";
 import TopMenu from "../components/TopMenu";
 
-export default function Login() {
+export default function Auth() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const globalStyles = getGlobalStyles("light");
 
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  async function signInWithEmail() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
 
-  const handleLogin = () => {
-    console.log("Login:", email, senha);
-  };
+    if (error?.status === 400) {
+      alert("E-mail ou senha inválidos");
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    router.push(pageNames.pages.mainMenu);
+  }
+
+  async function signUpWithEmail() {
+    setLoading(true);
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) alert(error.message);
+    if (!session) alert("Please check your inbox for email verification!");
+    setLoading(false);
+  }
 
   return (
     <>
@@ -65,11 +95,14 @@ export default function Login() {
               placeholder="Senha"
               placeholderTextColor="#aaa"
               secureTextEntry
-              value={senha}
-              onChangeText={setSenha}
+              value={password}
+              onChangeText={setPassword}
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => signInWithEmail()}
+            >
               <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>
 
@@ -77,6 +110,7 @@ export default function Login() {
               {"Não tem um conta? "}
               <TouchableOpacity
                 onPress={() => {
+                  signUpWithEmail();
                   router.push("/register");
                 }}
               >
@@ -86,6 +120,7 @@ export default function Login() {
           </View>
         </View>
       </LinearGradient>
+      {loading && <Carregando />}
     </>
   );
 }

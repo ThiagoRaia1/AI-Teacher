@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Slot, usePathname } from "expo-router";
 import { Drawer } from "expo-router/drawer";
-import { useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { breakpoints } from "../utils/breakpoints";
 import { pageNames } from "../utils/pageNames";
@@ -16,27 +16,47 @@ export default function Layout() {
       drawerLabelAndTitle: "Menu Inicial",
     },
     pages: {
+      main: {
+        pathname: "(pages)/index",
+        drawerLabelAndTitle: "Pages",
+      },
       mainMenu: {
-        pathname: "pages/mainMenu/index",
+        pathname: "(pages)/mainMenu",
         drawerLabelAndTitle: "Menu Principal",
+      },
+      roadmap: {
+        pathname: "(pages)/roadmap/index",
+        drawerLabelAndTitle: "Roadmap",
+      },
+      meusRoadmaps: {
+        pathname: "(pages)/meusRoadmaps/index",
+        drawerLabelAndTitle: "Meus Roadmaps",
       },
     },
     login: {
-      pathname: "login/index",
+      pathname: "auth/login",
       drawerLabelAndTitle: "Login",
     },
+    logout: {
+      pathname: "auth/logout",
+      drawerLabelAndTitle: "Logout",
+    },
     register: {
-      pathname: "register/index",
+      pathname: "auth/register",
       drawerLabelAndTitle: "Cadastrar-se",
     },
   };
 
   // Array para não exibir os itens definidos no drawer. Componentes devem ser adicionados aqui.
-  const ignorableComponents = ["ContactCard", "components/TopMenu"];
+  const ignorableComponents = [
+    "ContactCard",
+    "components/TopMenu",
+    "components/Carregando",
+  ];
 
-  // Se a largura for maior que 768px, o drawer não é renderizado
+  // Se for web, o drawer não é renderizado
   // e exibe o menu em components/TopMenu no lugar
-  if (width < breakpoints.mobile) {
+  if (width < 768) {
     switch (pathname) {
       case pageNames.main:
       case pageNames.login:
@@ -82,7 +102,7 @@ export default function Layout() {
               {/* Nao aparecem no drawer */}
 
               {/* Percorre o array ignorableComponents, todo pathname que for 
-              adicionado nesse array não aparecerá em nenhum drawer */}
+              adicionado nesse array não aparecerá no drawer */}
               {ignorableComponents.map((componentName) => (
                 <Drawer.Screen
                   key={componentName}
@@ -95,6 +115,42 @@ export default function Layout() {
 
               <Drawer.Screen
                 name={pathnames.pages.mainMenu.pathname}
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+
+              <Drawer.Screen
+                name={pathnames.logout.pathname}
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+
+              <Drawer.Screen
+                name={pathnames.pages.main.pathname}
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+
+              <Drawer.Screen
+                name={pathnames.pages.roadmap.pathname}
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+
+              <Drawer.Screen
+                name={pathnames.pages.meusRoadmaps.pathname}
                 options={{
                   drawerItemStyle: {
                     display: "none",
@@ -125,10 +181,10 @@ export default function Layout() {
               />
 
               <Drawer.Screen
-                name={pathnames.main.pathname}
+                name={pathnames.logout.pathname}
                 options={{
-                  drawerLabel: "Logout",
-                  title: "Logout",
+                  drawerLabel: pathnames.logout.drawerLabelAndTitle,
+                  title: pathnames.logout.drawerLabelAndTitle,
                   drawerIcon: ({ color, size }) => (
                     <Ionicons name="log-out" size={size} color={color} />
                   ),
@@ -136,7 +192,7 @@ export default function Layout() {
               />
 
               {/* Percorre o array ignorableComponents, todo pathname que for 
-              adicionado nesse array não aparecerá em nenhum drawer */}
+              adicionado nesse array não aparecerá no drawer */}
               {ignorableComponents.map((componentName) => (
                 <Drawer.Screen
                   key={componentName}
@@ -146,6 +202,15 @@ export default function Layout() {
                   }}
                 />
               ))}
+
+              <Drawer.Screen
+                name={pathnames.main.pathname}
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                }}
+              />
 
               <Drawer.Screen
                 name={pathnames.login.pathname}

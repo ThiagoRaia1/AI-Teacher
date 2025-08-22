@@ -6,10 +6,10 @@ import {
   Text,
   StyleSheet,
   useWindowDimensions,
+  Platform,
 } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { getGlobalStyles } from "../../globalStyles";
-import { breakpoints } from "../../utils/breakpoints";
 import { pageNames } from "../../utils/pageNames";
 
 export default function TopMenu({
@@ -19,7 +19,7 @@ export default function TopMenu({
 }) {
   const { width } = useWindowDimensions();
   const globalStyles = getGlobalStyles("light");
-  const isMobile = width < breakpoints.mobile;
+  const isMobile = Platform.OS !== "web";
   const pathname = usePathname();
 
   return (
